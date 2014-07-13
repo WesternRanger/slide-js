@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        .test{margin:auto;width:500px;height:340px;}
+        .title{width:500px;height:30px;}
+        .title #one{float: left;width:100px;margin-right:50px;}
+        .title #two{float:right; width:100px;}
+        .title span{
+            float:left;
+            border-radius:16px;
+            display:block;
+            width:20px;
+            height:20px;
+            line-height: 20px;
+            vertical-align: middle;
+            text-align: center;
+            border:1px darkgray double;
+            margin-right: 12px;
+            margin-left: 12px;
+        }
+        .box{width:500px;height:300px;position: relative;overflow: hidden;}
+        .content{width:2000px;height:300px;position:absolute;}
+        .content img{display: block;float:left;}
+        .color{background: red;}
+    </style>
+</head>
+<body>
+    <div class="test">
+        <div class="title" id="title">
+            <button id="one"><<</button>
+            <span id="s1" class="color">1</span>
+            <span id="s2">2</span>
+            <span id="s3">3</span>
+            <span id="s4">4</span>
+            <button id="two">>></button>
+        </div>
+        <div class="box" id="box">
+            <div class="content" id="content">
+                <img src="img/1.jpeg">
+                <img src="img/2.jpg">
+                <img src="img/3.jpg">
+                <img src="img/4.jpg">
+            </div>
+        </div>
+    </div>
+    <script src="J_load/load.js"></script>
+    <script>
+        function addLoadEvent(func){
+            var oldonload = window.onload;
+            if(typeof window.onload != 'function'){
+                window.onload = func;
+            }else{
+                window.onload = function(){
+                    oldonload();
+                    func();
+                }
+            }
+        }
+        addLoadEvent(positionMessage);
+
+        var two=document.getElementById("two");
+        var one=document.getElementById("one");
+
+        function positionMessage(){
+            if(!document.getElementById) return false;
+            if(!document.getElementById("content")) return false;
+            var elem = document.getElementById("content");
+            elem.style.position = "absolute";
+            elem.style.left = 0;
+            elem.style.top = 0;
+            two.addEventListener("click",function(){
+                var x = parseInt(document.getElementById("content").style.left);
+                if(x==0){
+                    moveElement("content",-500,10,0.2);
+                    document.getElementById("s1").className="";
+                    document.getElementById("s2").className="color";
+                }
+                if(x==-500){
+                    moveElement("content",-1000,10,0.2);
+                    document.getElementById("s2").className="";
+                    document.getElementById("s3").className="color";
+                }
+                if(x==-1000){
+                    moveElement("content",-1500,10,0.2);
+                    document.getElementById("s3").className="";
+                    document.getElementById("s4").className="color";
+                }
+                if(x==-1500){
+                    moveElement("content",0,10,0.2);
+                    document.getElementById("s4").className="";
+                    document.getElementById("s1").className="color";
+                }
+            },false);
+            one.addEventListener("click",function(){
+                var y = parseInt(document.getElementById("content").style.left);
+                if(y==0){
+                    moveElement("content",-1500,10,0.2);
+                    document.getElementById("s1").className="";
+                    document.getElementById("s4").className="color";
+                }
+                if(y==-500){
+                    moveElement("content",0,10,0.2);
+                    document.getElementById("s2").className="";
+                    document.getElementById("s1").className="color";
+                }
+                if(y==-1000){
+                    moveElement("content",-500,10,0.2);
+                    document.getElementById("s3").className="";
+                    document.getElementById("s2").className="color";
+                }
+                if(y==-1500){
+                    moveElement("content",-1000,10,0.2);
+                    document.getElementById("s4").className="";
+                    document.getElementById("s3").className="color";
+                }
+            },false)
+        }
+        function moveElement(elementID,final_x,final_y,interval){
+            if(!document.getElementById(elementID)) return false;
+            var elem = document.getElementById(elementID);
+            var xpos = parseInt(elem.style.left);
+            var ypos = parseInt(elem.style.top);
+            if(xpos == final_x && ypos == final_y){
+                return true;
+            }
+            if(xpos > final_x){
+                xpos-=10;
+            }
+            if(xpos < final_x){
+                xpos+=10;
+            }
+            if(ypos > final_y){
+                ypos-=10;
+            }
+            if(ypos < final_y){
+                ypos+=10;
+            }
+            elem.style.left = xpos +"px";
+            elem.style.top = ypos +"px";
+            var repeat = "moveElement('"+elementID+"',"+final_x+","+final_y+","+interval+")";
+            setTimeout(repeat,interval);
+        }
+    </script>
+</body>
+</html>
